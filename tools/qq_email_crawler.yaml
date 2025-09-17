@@ -1,0 +1,30 @@
+identity:
+  name: "qq_email_crawler"
+  author: "black7stars"
+  label:
+    en_US: "qq_email_crawler"
+    zh_Hans: "qq_email_crawler"
+    pt_BR: "qq_email_crawler"
+description:
+  human:
+    en_US: "This plugin is a crawler for QQ-email."
+    zh_Hans: "This plugin is a crawler for QQ-email."
+    pt_BR: "This plugin is a crawler for QQ-email."
+  llm: "This plugin is a crawler for QQ-email."
+parameters:
+  - name: query
+    type: string
+    required: true
+    label:
+      en_US: Query string
+      zh_Hans: 查询语句
+      pt_BR: Query string
+    human_description:
+      en_US: "This plugin is a crawler for QQ-email."
+      zh_Hans: "This plugin is a crawler for QQ-email."
+      pt_BR: "This plugin is a crawler for QQ-email."
+    llm_description: "This plugin is a crawler for QQ-email."
+    form: llm
+extra:
+  python:
+    source: tools/qq_email_crawler.py

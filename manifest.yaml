@@ -1,0 +1,36 @@
+version: 0.0.1
+type: plugin
+author: black7stars
+name: qq_email_crawler
+label:
+  en_US: qq_email_crawler
+  ja_JP: qq_email_crawler
+  zh_Hans: qq_email_crawler
+  pt_BR: qq_email_crawler
+description:
+  en_US: This plugin is a crawler for QQ-email.
+  ja_JP: This plugin is a crawler for QQ-email.
+  zh_Hans: This plugin is a crawler for QQ-email.
+  pt_BR: This plugin is a crawler for QQ-email.
+icon: icon.svg
+icon_dark: icon-dark.svg
+resource:
+  memory: 268435456
+  permission: {}
+plugins:
+  tools:
+    - provider/qq_email_crawler.yaml
+meta:
+  version: 0.0.1
+  arch:
+    - amd64
+    - arm64
+  runner:
+    language: python
+    version: "3.12"
+    entrypoint: main
+  minimum_dify_version: null
+created_at: 2025-09-17T14:34:08.485653998+08:00
+privacy: PRIVACY.md
+repo: https://github.com/black7stars/dify_email_plugin
+verified: false
