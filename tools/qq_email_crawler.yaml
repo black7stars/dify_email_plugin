@@ -1,29 +1,37 @@
 identity:
-  name: "qq_email_crawler"
-  author: "black7stars"
+  name: crawl-emails
+  author: black7stars@github.com
   label:
-    en_US: "qq_email_crawler"
-    zh_Hans: "qq_email_crawler"
-    pt_BR: "qq_email_crawler"
+    en_US: Crawl QQ Emails
+    zh_Hans: 爬取QQ邮件
 description:
   human:
-    en_US: "This plugin is a crawler for QQ-email."
-    zh_Hans: "This plugin is a crawler for QQ-email."
-    pt_BR: "This plugin is a crawler for QQ-email."
-  llm: "This plugin is a crawler for QQ-email."
+    en_US: Crawl emails from specified folder and merge them into a document
+    zh_Hans: 从指定文件夹爬取邮件并合并为文档
+  llm: A tool that crawls emails from a specified QQ mailbox folder for today and merges them into a single document. The output will be the combined content of all emails.
 parameters:
-  - name: query
+  - name: folder_name
     type: string
     required: true
     label:
-      en_US: Query string
-      zh_Hans: 查询语句
-      pt_BR: Query string
+      en_US: Folder Name
+      zh_Hans: 文件夹名称
     human_description:
-      en_US: "This plugin is a crawler for QQ-email."
-      zh_Hans: "This plugin is a crawler for QQ-email."
-      pt_BR: "This plugin is a crawler for QQ-email."
-    llm_description: "This plugin is a crawler for QQ-email."
+      en_US: The name of the email folder to crawl (e.g., INBOX, Sent)
+      zh_Hans: 要爬取的邮件文件夹名称（如：收件箱、已发送）
+    llm_description: The name of the email folder to crawl. Common values are 'INBOX' for inbox, 'Sent Messages' for sent emails.
+    form: llm
+  - name: output_format
+    type: string
+    required: false
+    default: markdown
+    label:
+      en_US: Output Format
+      zh_Hans: 输出格式
+    human_description:
+      en_US: The format of the output document (markdown, html, txt)
+      zh_Hans: 输出文档的格式（markdown, html, txt）
+    llm_description: The format of the output document. Valid values are 'markdown', 'html', or 'txt'. Default is 'markdown'.
     form: llm
 extra:
   python:

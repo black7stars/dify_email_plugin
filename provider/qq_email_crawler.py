@@ -1,53 +1,27 @@
+import imaplib
 from typing import Any
 
-from dify_plugin import ToolProvider
-from dify_plugin.errors.tool import ToolProviderCredentialValidationError
+from dify_plugin import ToolProvider    # type: ignore
+from dify_plugin.errors.tool import ToolProviderCredentialValidationError   # type: ignore
 
 
 class QqEmailCrawlerProvider(ToolProvider):
-    
     def _validate_credentials(self, credentials: dict[str, Any]) -> None:
+        """
+        验证QQ邮箱凭证是否有效
+        """
+        email_address = credentials.get("email_address")
+        auth_code = credentials.get("authorization_code")
+
+        if not email_address or not auth_code:
+            raise ToolProviderCredentialValidationError("邮箱地址和授权码不能为空")
+
         try:
-            """
-            IMPLEMENT YOUR VALIDATION HERE
-            """
+            # 连接到QQ邮箱IMAP服务器
+            imap_server = imaplib.IMAP4_SSL("imap.qq.com", 993)
+            # 尝试登录
+            imap_server.login(email_address, auth_code)
+            # 关闭连接
+            imap_server.logout()
         except Exception as e:
-            raise ToolProviderCredentialValidationError(str(e))
-
-    #########################################################################################
-    # If OAuth is supported, uncomment the following functions.
-    # Warning: please make sure that the sdk version is 0.4.2 or higher.
-    #########################################################################################
-    # def _oauth_get_authorization_url(self, redirect_uri: str, system_credentials: Mapping[str, Any]) -> str:
-    #     """
-    #     Generate the authorization URL for qq_email_crawler OAuth.
-    #     """
-    #     try:
-    #         """
-    #         IMPLEMENT YOUR AUTHORIZATION URL GENERATION HERE
-    #         """
-    #     except Exception as e:
-    #         raise ToolProviderOAuthError(str(e))
-    #     return ""
-        
-    # def _oauth_get_credentials(
-    #     self, redirect_uri: str, system_credentials: Mapping[str, Any], request: Request
-    # ) -> Mapping[str, Any]:
-    #     """
-    #     Exchange code for access_token.
-    #     """
-    #     try:
-    #         """
-    #         IMPLEMENT YOUR CREDENTIALS EXCHANGE HERE
-    #         """
-    #     except Exception as e:
-    #         raise ToolProviderOAuthError(str(e))
-    #     return dict()
-
-    # def _oauth_refresh_credentials(
-    #     self, redirect_uri: str, system_credentials: Mapping[str, Any], credentials: Mapping[str, Any]
-    # ) -> OAuthCredentials:
-    #     """
-    #     Refresh the credentials
-    #     """
-    #     return OAuthCredentials(credentials=credentials, expires_at=-1)
+            raise ToolProviderCredentialValidationError(f"邮箱凭证验证失败: {e}")
