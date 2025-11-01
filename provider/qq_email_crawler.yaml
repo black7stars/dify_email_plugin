@@ -32,6 +32,9 @@ credentials_for_provider:
       en_US: How to get QQ email authorization code
       zh_Hans: 如何获取QQ邮箱授权码
 
+tools:
+  - tools/qq_email_crawler.yaml
+
 extra:
   python:
     source: provider/qq_email_crawler.py
