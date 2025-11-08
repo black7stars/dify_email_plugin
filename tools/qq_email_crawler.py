@@ -196,23 +196,30 @@ class QqEmailCrawlerTool(Tool):
                     _log("PARSE_RESULT", f"from_string 成功，类型: {type(msg)}")
                 except Exception as e1:
                     _log("FLANKER_PARSE_ERROR", f"from_string 解析失败: {e1}")
-                    # 如果 Flanker 支持 from_bytes，尝试用 bytes 解析
+                    # 尝试用多种编码重新解码 raw_email 并用 from_string 解析（避免使用可能不存在的 from_bytes）
                     try:
-                        if hasattr(mime, 'from_bytes'):
-                            msg = mime.from_bytes(raw_email)
-                            _log("PARSE_RESULT", f"from_bytes 成功，类型: {type(msg)}")
-                        else:
-                            raise
-                    except Exception as e2:
-                        _log("FLANKER_PARSE_ERROR", f"from_bytes 解析失败或不可用: {e2}")
-                        # 备用：对原始内容做更强预处理后重试
-                        try:
+                        decode_attempts = ['utf-8', 'latin-1', 'gbk', 'gb2312', 'iso-8859-1']
+                        msg = None
+                        for enc in decode_attempts:
+                            try:
+                                alt = raw_email.decode(enc, errors='replace')
+                                _log("PARSE_RETRY", f"尝试用编码 {enc} decode 后解析")
+                                msg = mime.from_string(alt)
+                                _log("PARSE_RESULT", f"from_string 用 {enc} 成功，类型: {type(msg)}")
+                                break
+                            except Exception as inner_e:
+                                _log("PARSE_RETRY_FAIL", f"编码 {enc} 解析失败: {inner_e}")
+                                continue
+
+                        if msg is None:
+                            # 备用：对原始内容做更强预处理后重试
                             from email_preprocessor import preprocess_email_for_flanker
                             pre = preprocess_email_for_flanker(decode_try)
                             msg = mime.from_string(pre)
-                        except Exception as e3:
-                            _log("FLANKER_PARSE_FATAL", f"最终解析失败: {e3}")
-                            raise
+
+                    except Exception as e2:
+                        _log("FLANKER_PARSE_FATAL", f"最终解析失败: {e2}")
+                        raise
 
                 # 邮件头日期筛选（只处理当天邮件）
                 date_received_raw = None
